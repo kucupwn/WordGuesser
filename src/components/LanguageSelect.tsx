@@ -1,4 +1,10 @@
+import type { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
+import type { Languages } from "../App";
+
+interface Props {
+  setLanguage: Dispatch<SetStateAction<Languages>>;
+}
 
 const LanguageChooseButtonContainer = styled.div`
   display: flex;
@@ -13,11 +19,15 @@ const LanguageChooseButton = styled.div`
   cursor: pointer;
 `;
 
-export function LanguageSelect() {
+export function LanguageSelect({ setLanguage }: Props) {
   return (
     <LanguageChooseButtonContainer>
-      <LanguageChooseButton>Russian</LanguageChooseButton>
-      <LanguageChooseButton>Spanish</LanguageChooseButton>
+      <LanguageChooseButton onClick={() => setLanguage("russian")}>
+        Russian
+      </LanguageChooseButton>
+      <LanguageChooseButton onClick={() => setLanguage("spanish")}>
+        Spanish
+      </LanguageChooseButton>
     </LanguageChooseButtonContainer>
   );
 }
