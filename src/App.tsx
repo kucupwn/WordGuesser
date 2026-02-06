@@ -12,7 +12,7 @@ export function App() {
       {language === "" ? (
         <LanguageSelect setLanguage={setLanguage} />
       ) : (
-        <Game />
+        <Game language={language} />
       )}
     </>
   );
