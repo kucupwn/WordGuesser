@@ -1,4 +1,4 @@
-interface RussianVocabularyItem {
+export interface RussianVocabularyItem {
   english: string;
   russian: string;
 }
