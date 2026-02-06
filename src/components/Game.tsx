@@ -5,14 +5,19 @@ import { spanishVocabulary } from "../assets/spanishWords";
 
 type GameLanguage = "russian" | "spanish";
 
-interface Props {
-  language: GameLanguage;
-}
-
 type VocabularyItem = {
   english: string;
   russian?: string;
   spanish?: string;
+};
+
+interface Props {
+  language: GameLanguage;
+}
+
+const vocabularies: Record<GameLanguage, VocabularyItem[]> = {
+  russian: russianVocabulary,
+  spanish: spanishVocabulary,
 };
 
 const GameContainer = styled.div`
@@ -52,8 +57,7 @@ const GetButton = styled.button`
 `;
 
 export function Game({ language }: Props) {
-  const vocabulary =
-    language === "russian" ? russianVocabulary : spanishVocabulary;
+  const vocabulary = vocabularies[language];
 
   const [currentWord, setCurrentWord] = useState<VocabularyItem | null>(null);
 
