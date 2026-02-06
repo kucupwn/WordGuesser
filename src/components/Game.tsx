@@ -20,6 +20,12 @@ const vocabularies: Record<GameLanguage, VocabularyItem[]> = {
   spanish: spanishVocabulary,
 };
 
+const defaultWord: VocabularyItem = {
+  english: "English",
+  russian: "Russian",
+  spanish: "Spanish",
+};
+
 const GameContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -59,7 +65,7 @@ const GetButton = styled.button`
 export function Game({ language }: Props) {
   const vocabulary = vocabularies[language];
 
-  const [currentWord, setCurrentWord] = useState<VocabularyItem | null>(null);
+  const [currentWord, setCurrentWord] = useState<VocabularyItem>(defaultWord);
 
   function getRandomWord() {
     const index = Math.floor(Math.random() * vocabulary.length);
@@ -70,10 +76,10 @@ export function Game({ language }: Props) {
     <GameContainer>
       <WordBoxContainer>
         <WordBox>
-          <p>{currentWord?.[language]}</p>
+          <p>{currentWord[language]}</p>
         </WordBox>
         <WordBox>
-          <p>{currentWord?.english}</p>
+          <p>{currentWord.english}</p>
         </WordBox>
       </WordBoxContainer>
       <GetButton onClick={getRandomWord}>Get</GetButton>
