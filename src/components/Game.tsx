@@ -34,6 +34,8 @@ const WordBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  padding: 5px;
   width: 400px;
   height: 100px;
   background-color: aquamarine;
@@ -46,6 +48,7 @@ const GetButton = styled.button`
   width: auto;
   border-radius: 10px;
   font-size: 40px;
+  cursor: pointer;
 `;
 
 export function Game({ language }: Props) {
