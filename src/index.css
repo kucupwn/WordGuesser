@@ -1,3 +1,7 @@
+:root {
+  --button-color: rgb(150, 200, 255);
+}
+
 body {
   display: flex;
   justify-content: center;
