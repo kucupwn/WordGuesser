@@ -49,7 +49,7 @@ const WordBox = styled.div`
   padding: 5px;
   width: 400px;
   height: 100px;
-  background-color: aquamarine;
+  background-color: var(--language-button-color);
   border-radius: 20px;
   font-size: 2rem;
   cursor: pointer;
@@ -59,6 +59,7 @@ const GetButton = styled.button`
   width: auto;
   border-radius: 10px;
   font-size: 40px;
+  background-color: var(--action-button-color);
   cursor: pointer;
 `;
 

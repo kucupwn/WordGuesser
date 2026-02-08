@@ -1,5 +1,6 @@
 :root {
-  --button-color: rgb(150, 200, 255);
+  --language-button-color: rgb(150, 200, 255);
+  --action-button-color: rgb(255, 211, 150);
 }
 
 body {
