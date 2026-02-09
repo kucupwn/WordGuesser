@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { use, useState } from "react";
 import { russianVocabulary } from "../assets/russianWords";
 import { spanishVocabulary } from "../assets/spanishWords";
 
@@ -10,6 +10,8 @@ type VocabularyItem = {
   russian?: string;
   spanish?: string;
 };
+
+type HiddenLanguage = "foreign" | "english" | null;
 
 interface Props {
   language: GameLanguage;
@@ -67,11 +69,14 @@ export function Game({ language }: Props) {
   const vocabulary = vocabularies[language];
 
   const [currentWord, setCurrentWord] = useState<VocabularyItem>(defaultWord);
+  const [hidden, setHidden] = useState<HiddenLanguage>(null);
 
   function getRandomWord() {
     const index = Math.floor(Math.random() * vocabulary.length);
     setCurrentWord(vocabulary[index]);
   }
+
+  function hideWordBox(language: HiddenLanguage) {}
 
   return (
     <GameContainer>
