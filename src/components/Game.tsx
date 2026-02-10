@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { use, useState } from "react";
+import { useState } from "react";
 import { russianVocabulary } from "../assets/russianWords";
 import { spanishVocabulary } from "../assets/spanishWords";
 
@@ -84,10 +84,10 @@ export function Game({ language }: Props) {
     <GameContainer>
       <WordBoxContainer>
         <WordBox onClick={() => hideWord("foreign")}>
-          <p>{hidden === "foreign" ? "" : currentWord[language]}</p>
+          {hidden === "foreign" ? null : <p>{currentWord[language]}</p>}
         </WordBox>
         <WordBox onClick={() => hideWord("english")}>
-          <p>{hidden === "english" ? "" : currentWord.english}</p>
+          {hidden === "english" ? null : <p>{currentWord.english}</p>}
         </WordBox>
       </WordBoxContainer>
       <GetButton onClick={getRandomWord}>Get</GetButton>
