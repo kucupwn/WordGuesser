@@ -76,16 +76,18 @@ export function Game({ language }: Props) {
     setCurrentWord(vocabulary[index]);
   }
 
-  function hideWordBox(language: HiddenLanguage) {}
+  function hideWord(language: HiddenLanguage) {
+    hidden === language ? setHidden(null) : setHidden(language);
+  }
 
   return (
     <GameContainer>
       <WordBoxContainer>
-        <WordBox>
-          <p>{currentWord[language]}</p>
+        <WordBox onClick={() => hideWord("foreign")}>
+          <p>{hidden === "foreign" ? "" : currentWord[language]}</p>
         </WordBox>
-        <WordBox>
-          <p>{currentWord.english}</p>
+        <WordBox onClick={() => hideWord("english")}>
+          <p>{hidden === "english" ? "" : currentWord.english}</p>
         </WordBox>
       </WordBoxContainer>
       <GetButton onClick={getRandomWord}>Get</GetButton>
