@@ -101,7 +101,7 @@ export function Game({ language }: Props) {
 
   return (
     <GameContainer>
-      <Speaker src={speaker} alt="speaker" onClick={() => speak()}></Speaker>
+      <Speaker src={speaker} alt="speaker" onClick={speak}></Speaker>
       <WordBoxContainer>
         <WordBox onClick={() => hideWord("foreign")}>
           {hidden === "foreign" ? null : <p>{currentWord[language]}</p>}
