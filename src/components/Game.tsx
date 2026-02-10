@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { russianVocabulary } from "../assets/russianWords";
 import { spanishVocabulary } from "../assets/spanishWords";
+import speaker from "../assets/speaker.png";
 
 type GameLanguage = "russian" | "spanish";
 
@@ -65,6 +66,12 @@ const GetButton = styled.button`
   cursor: pointer;
 `;
 
+const Speaker = styled.img`
+  cursor: pointer;
+  width: 42px;
+  height: 42px;
+`;
+
 export function Game({ language }: Props) {
   const vocabulary = vocabularies[language];
 
@@ -82,6 +89,7 @@ export function Game({ language }: Props) {
 
   return (
     <GameContainer>
+      <Speaker src={speaker} alt="speaker"></Speaker>
       <WordBoxContainer>
         <WordBox onClick={() => hideWord("foreign")}>
           {hidden === "foreign" ? null : <p>{currentWord[language]}</p>}
