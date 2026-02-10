@@ -29,6 +29,11 @@ const defaultWord: VocabularyItem = {
   spanish: "Spanish",
 };
 
+const speakLanguage = {
+  russian: "ru-RU",
+  spanish: "es-ES",
+};
+
 const GameContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -87,9 +92,16 @@ export function Game({ language }: Props) {
     hidden === language ? setHidden(null) : setHidden(language);
   }
 
+  function speak() {
+    const word = currentWord[language];
+    const wordToSay = new SpeechSynthesisUtterance(word);
+    wordToSay.lang = speakLanguage[language];
+    speechSynthesis.speak(wordToSay);
+  }
+
   return (
     <GameContainer>
-      <Speaker src={speaker} alt="speaker"></Speaker>
+      <Speaker src={speaker} alt="speaker" onClick={() => speak()}></Speaker>
       <WordBoxContainer>
         <WordBox onClick={() => hideWord("foreign")}>
           {hidden === "foreign" ? null : <p>{currentWord[language]}</p>}
