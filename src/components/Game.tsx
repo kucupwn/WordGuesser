@@ -110,11 +110,7 @@ export function Game({ language }: Props) {
   }
 
   function getPreviousWord() {
-    if (currentIndex <= 0) {
-      return;
-    } else {
-      setCurrentIndex((prev) => prev - 1);
-    }
+    setCurrentIndex((prev) => Math.max(0, prev - 1));
   }
 
   return (
