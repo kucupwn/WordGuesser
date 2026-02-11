@@ -3,6 +3,7 @@ import { useState } from "react";
 import { russianVocabulary } from "../assets/russianWords";
 import { spanishVocabulary } from "../assets/spanishWords";
 import speaker from "../assets/speaker.png";
+import back from "../assets/arrow-back.png";
 
 type GameLanguage = "russian" | "spanish";
 
@@ -77,6 +78,12 @@ const Speaker = styled.img`
   height: 42px;
 `;
 
+const Back = styled.img`
+  cursor: pointer;
+  width: 42px;
+  height: 42px;
+`;
+
 export function Game({ language }: Props) {
   const vocabulary = vocabularies[language];
 
@@ -111,6 +118,7 @@ export function Game({ language }: Props) {
         </WordBox>
       </WordBoxContainer>
       <GetButton onClick={getRandomWord}>Get</GetButton>
+      <Back src={back} alt="back"></Back>
     </GameContainer>
   );
 }
