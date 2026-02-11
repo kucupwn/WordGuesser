@@ -95,7 +95,7 @@ export function Game({ language }: Props) {
     const index = Math.floor(Math.random() * vocabulary.length);
     const randomWord = vocabulary[index];
     setHistory((prev) => [...prev, randomWord]);
-    setCurrentIndex(currentIndex + 1);
+    setCurrentIndex((prev) => prev + 1);
   }
 
   function hideWord(language: HiddenLanguage) {
@@ -109,7 +109,13 @@ export function Game({ language }: Props) {
     speechSynthesis.speak(wordToSay);
   }
 
-  function getPreviousWord() {}
+  function getPreviousWord() {
+    if (currentIndex <= 0) {
+      return;
+    } else {
+      setCurrentIndex((prev) => prev - 1);
+    }
+  }
 
   return (
     <GameContainer>
