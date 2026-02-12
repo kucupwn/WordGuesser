@@ -92,9 +92,11 @@ export function Game({ language }: Props) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   function getRandomWord() {
-    const index = Math.floor(Math.random() * vocabulary.length);
-    const randomWord = vocabulary[index];
-    setHistory((prev) => [...prev, randomWord]);
+    if (currentIndex === history.length - 1) {
+      const index = Math.floor(Math.random() * vocabulary.length);
+      const randomWord = vocabulary[index];
+      setHistory((prev) => [...prev, randomWord]);
+    }
     setCurrentIndex((prev) => prev + 1);
   }
 
