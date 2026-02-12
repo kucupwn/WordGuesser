@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import type { GameLanguage, HiddenLanguage, VocabularyItem } from "./Game";
-import { useState } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
 
 interface Props {
   language: GameLanguage;
@@ -36,21 +36,52 @@ const Hint = styled.p`
 export function WordGuess({ language, hidden, currentWord }: Props) {
   const hiddenLanguage = hidden === "foreign" ? language : "english";
 
-  const [hint, setHint] = useState<string>(getDefaultHintLines());
+  const [hint, setHint] = useState<string>(
+    getDefaultHintLines(currentWord[language]!),
+  );
+  const [inputValue, setInputValue] = useState<string>("");
 
-  function getDefaultHintLines() {
-    const underlines = [];
-    for (let i = 0; i <= currentWord[hiddenLanguage]!.length - 1; i++) {
-      underlines.push("_");
+  function getDefaultHintLines(word: string) {
+    return "_".repeat(word.length);
+  }
+
+  function updateInputValue(e: ChangeEvent<HTMLInputElement>) {
+    setInputValue(e.target.value);
+  }
+
+  function checkInput(input: string) {
+    const matched = hint.split("");
+
+    for (let i = 0; i < input.length; i++) {
+      if (input[i] === currentWord[language]![i]) {
+        matched[i] = input[i];
+      }
     }
 
-    return underlines.join("");
+    return matched.join("");
   }
+
+  function updateHint() {
+    const matchedHint = checkInput(inputValue);
+    setHint(matchedHint);
+    setInputValue("");
+  }
+
+  useEffect(() => {
+    const hiddenWord = currentWord[hiddenLanguage]!;
+    setHint(getDefaultHintLines(hiddenWord));
+    setInputValue("");
+  }, [currentWord, hiddenLanguage]);
 
   return (
     <InputContainer>
-      <InputField name="guess" placeholder={hiddenLanguage}></InputField>
-      <InputButton>Submit</InputButton>
+      <InputField
+        name="guess"
+        placeholder={hiddenLanguage}
+        value={inputValue}
+        onChange={updateInputValue}
+      ></InputField>
+      <InputButton onClick={() => updateHint()}>Submit</InputButton>
       <Hint>{hint}</Hint>
     </InputContainer>
   );
