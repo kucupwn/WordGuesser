@@ -4,6 +4,7 @@ import { russianVocabulary } from "../assets/russianWords";
 import { spanishVocabulary } from "../assets/spanishWords";
 import speaker from "../assets/speaker.png";
 import back from "../assets/arrow-back.png";
+import { WordGuess } from "./WordGuess";
 
 type GameLanguage = "russian" | "spanish";
 
@@ -13,7 +14,7 @@ type VocabularyItem = {
   spanish?: string;
 };
 
-type HiddenLanguage = "foreign" | "english" | null;
+export type HiddenLanguage = "foreign" | "english" | null;
 
 interface Props {
   language: GameLanguage;
@@ -117,6 +118,7 @@ export function Game({ language }: Props) {
 
   return (
     <GameContainer>
+      <WordGuess hidden={hidden} />
       <Speaker src={speaker} alt="speaker" onClick={speak}></Speaker>
       <WordBoxContainer>
         <WordBox onClick={() => hideWord("foreign")}>
