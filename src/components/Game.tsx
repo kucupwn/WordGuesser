@@ -8,7 +8,7 @@ import { WordGuess } from "./WordGuess";
 
 export type GameLanguage = "russian" | "spanish";
 
-type VocabularyItem = {
+export type VocabularyItem = {
   english: string;
   russian?: string;
   spanish?: string;
@@ -118,7 +118,13 @@ export function Game({ language }: Props) {
 
   return (
     <GameContainer>
-      {hidden && <WordGuess language={language} hidden={hidden} />}
+      {hidden && (
+        <WordGuess
+          language={language}
+          hidden={hidden}
+          currentWord={history[currentIndex]}
+        />
+      )}
       <Speaker src={speaker} alt="speaker" onClick={speak}></Speaker>
       <WordBoxContainer>
         <WordBox onClick={() => hideWord("foreign")}>
