@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import type { HiddenLanguage } from "./Game";
+import type { GameLanguage } from "./Game";
 
 interface Props {
-  hidden: HiddenLanguage;
+  language: GameLanguage;
 }
 
 const InputContainer = styled.div`
@@ -21,10 +21,10 @@ const InputButton = styled.button`
   border-radius: 5px;
 `;
 
-export function WordGuess({ hidden }: Props) {
+export function WordGuess({ language }: Props) {
   return (
     <InputContainer>
-      <InputField></InputField>
+      <InputField placeholder={language}></InputField>
       <InputButton>Submit</InputButton>
     </InputContainer>
   );
