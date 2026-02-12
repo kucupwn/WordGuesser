@@ -14,7 +14,7 @@ type VocabularyItem = {
   spanish?: string;
 };
 
-type HiddenLanguage = "foreign" | "english" | null;
+export type HiddenLanguage = "foreign" | "english" | null;
 
 interface Props {
   language: GameLanguage;
@@ -118,7 +118,7 @@ export function Game({ language }: Props) {
 
   return (
     <GameContainer>
-      {hidden && <WordGuess language={language} />}
+      {hidden && <WordGuess language={language} hidden={hidden} />}
       <Speaker src={speaker} alt="speaker" onClick={speak}></Speaker>
       <WordBoxContainer>
         <WordBox onClick={() => hideWord("foreign")}>
