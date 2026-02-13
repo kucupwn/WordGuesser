@@ -108,9 +108,14 @@ export function WordGuess({
   }
 
   useEffect(() => {
-    const initialHint = processedAnswers.map(
-      (answer) => answer.prefix + "_".repeat(answer.core.length),
-    );
+    const initialHint = processedAnswers.map((answer) => {
+      const maskedCore = answer.core
+        .split("")
+        .map((char) => (char === " " ? " " : "_"))
+        .join("");
+
+      return answer.prefix + maskedCore;
+    });
 
     setHint(initialHint);
     setInputValue("");
