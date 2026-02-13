@@ -36,9 +36,7 @@ const Hint = styled.p`
 export function WordGuess({ language, hidden, currentWord }: Props) {
   const hiddenLanguage = hidden === "foreign" ? language : "english";
 
-  const [hint, setHint] = useState<string>(
-    getDefaultHintLines(currentWord[language]!),
-  );
+  const [hint, setHint] = useState<string>("");
   const [inputValue, setInputValue] = useState<string>("");
 
   function getDefaultHintLines(word: string) {
