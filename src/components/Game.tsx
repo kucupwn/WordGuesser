@@ -96,6 +96,7 @@ export function Game({ language }: Props) {
   const [hidden, setHidden] = useState<HiddenLanguage>(null);
   const [history, setHistory] = useState<VocabularyItem[]>([defaultWord]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [guessed, setGuessed] = useState<boolean>(true);
 
   function getRandomWord() {
     if (currentIndex === history.length - 1) {
@@ -104,10 +105,13 @@ export function Game({ language }: Props) {
       setHistory((prev) => [...prev, randomWord]);
     }
     setCurrentIndex((prev) => prev + 1);
+
+    if (hidden) setGuessed(false);
   }
 
   function hideWord(language: HiddenLanguage) {
     hidden === language ? setHidden(null) : setHidden(language);
+    setGuessed(false);
   }
 
   function speak() {
@@ -126,12 +130,22 @@ export function Game({ language }: Props) {
       <Speaker src={speaker} alt="speaker" onClick={speak}></Speaker>
       <WordBoxContainer>
         <WordBox onClick={() => hideWord("foreign")}>
-          {hidden === "foreign" ? null : (
+          {hidden === "foreign" ? (
+            guessed ? (
+              <p>{history[currentIndex][language]}</p>
+            ) : null
+          ) : (
             <p>{history[currentIndex][language]}</p>
           )}
         </WordBox>
         <WordBox onClick={() => hideWord("english")}>
-          {hidden === "english" ? null : <p>{history[currentIndex].english}</p>}
+          {hidden === "english" ? (
+            guessed ? (
+              <p>{history[currentIndex].english}</p>
+            ) : null
+          ) : (
+            <p>{history[currentIndex].english}</p>
+          )}
         </WordBox>
       </WordBoxContainer>
       <StepContainer>
@@ -143,6 +157,7 @@ export function Game({ language }: Props) {
           language={language}
           hidden={hidden}
           currentWord={history[currentIndex]}
+          setGuessed={setGuessed}
         />
       )}
     </GameContainer>

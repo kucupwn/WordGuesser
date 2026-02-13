@@ -1,11 +1,18 @@
 import styled from "styled-components";
 import type { GameLanguage, HiddenLanguage, VocabularyItem } from "./Game";
-import { useEffect, useState, type ChangeEvent } from "react";
+import {
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 
 interface Props {
   language: GameLanguage;
   hidden: HiddenLanguage;
   currentWord: VocabularyItem;
+  setGuessed: Dispatch<SetStateAction<boolean>>;
 }
 
 const InputContainer = styled.div`
@@ -33,7 +40,12 @@ const Hint = styled.p`
   font-weight: bold;
 `;
 
-export function WordGuess({ language, hidden, currentWord }: Props) {
+export function WordGuess({
+  language,
+  hidden,
+  currentWord,
+  setGuessed,
+}: Props) {
   const hiddenLanguage = hidden === "foreign" ? language : "english";
 
   const [hint, setHint] = useState<string>("");
@@ -63,6 +75,10 @@ export function WordGuess({ language, hidden, currentWord }: Props) {
     const matchedHint = checkInput(inputValue);
     setHint(matchedHint);
     setInputValue("");
+
+    if (matchedHint === currentWord[hiddenLanguage]) {
+      setGuessed(true);
+    }
   }
 
   useEffect(() => {
