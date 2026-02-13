@@ -118,13 +118,6 @@ export function Game({ language }: Props) {
 
   return (
     <GameContainer>
-      {hidden && (
-        <WordGuess
-          language={language}
-          hidden={hidden}
-          currentWord={history[currentIndex]}
-        />
-      )}
       <Speaker src={speaker} alt="speaker" onClick={speak}></Speaker>
       <WordBoxContainer>
         <WordBox onClick={() => hideWord("foreign")}>
@@ -138,6 +131,13 @@ export function Game({ language }: Props) {
       </WordBoxContainer>
       <GetButton onClick={getRandomWord}>Get</GetButton>
       <Back src={back} alt="back" onClick={getPreviousWord}></Back>
+      {hidden && (
+        <WordGuess
+          language={language}
+          hidden={hidden}
+          currentWord={history[currentIndex]}
+        />
+      )}
     </GameContainer>
   );
 }
