@@ -3,6 +3,7 @@ import { useState } from "react";
 import { russianVocabulary } from "../assets/russianWords";
 import { spanishVocabulary } from "../assets/spanishWords";
 import speaker from "../assets/speaker.png";
+import next from "../assets/arrow-next.png";
 import back from "../assets/arrow-back.png";
 import { WordGuess } from "./WordGuess";
 
@@ -65,15 +66,19 @@ const WordBox = styled.div`
   cursor: pointer;
 `;
 
-const GetButton = styled.button`
-  width: auto;
-  border-radius: 10px;
-  font-size: 40px;
-  background-color: var(--action-button-color);
+const Speaker = styled.img`
   cursor: pointer;
+  width: 42px;
+  height: 42px;
 `;
 
-const Speaker = styled.img`
+const StepContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+`;
+
+const Next = styled.img`
   cursor: pointer;
   width: 42px;
   height: 42px;
@@ -129,8 +134,10 @@ export function Game({ language }: Props) {
           {hidden === "english" ? null : <p>{history[currentIndex].english}</p>}
         </WordBox>
       </WordBoxContainer>
-      <GetButton onClick={getRandomWord}>Get</GetButton>
-      <Back src={back} alt="back" onClick={getPreviousWord}></Back>
+      <StepContainer>
+        <Back src={back} alt="back" onClick={getPreviousWord}></Back>
+        <Next src={next} alt="next" onClick={getRandomWord}></Next>
+      </StepContainer>
       {hidden && (
         <WordGuess
           language={language}
