@@ -47,44 +47,52 @@ export function WordGuess({
   setGuessed,
 }: Props) {
   const hiddenLanguage = hidden === "foreign" ? language : "english";
+  const correctAnswers = currentWord[hiddenLanguage]!.split("/").map((a) =>
+    a.trim(),
+  );
 
-  const [hint, setHint] = useState<string>("");
   const [inputValue, setInputValue] = useState<string>("");
-
-  function getDefaultHintLines(word: string) {
-    return "_".repeat(word.length);
-  }
+  const [hint, setHint] = useState<string[]>([]);
 
   function updateInputValue(e: ChangeEvent<HTMLInputElement>) {
     setInputValue(e.target.value);
   }
 
-  function checkInput(input: string) {
-    const matched = hint.split("");
-
-    for (let i = 0; i < input.length; i++) {
-      if (input[i] === currentWord[hiddenLanguage]![i]) {
-        matched[i] = input[i];
-      }
-    }
-
-    return matched.join("");
-  }
-
   function updateHint() {
-    const matchedHint = checkInput(inputValue);
-    setHint(matchedHint);
-    setInputValue("");
+    const trimmedInput = inputValue.trim();
 
-    if (matchedHint === currentWord[hiddenLanguage]) {
+    const newHint = correctAnswers.map((answer, answerIndex) => {
+      const matched = hint[answerIndex].split("");
+
+      for (let i = 0; i < trimmedInput.length; i++) {
+        if (trimmedInput[i] === answer[i]) {
+          matched[i] = trimmedInput[i];
+        }
+      }
+
+      return matched.join("");
+    });
+
+    setHint(newHint);
+
+    const isCorrect = correctAnswers.some((answer) => answer === trimmedInput);
+
+    if (isCorrect) {
       setGuessed(true);
+      setHint(correctAnswers);
     }
+
+    setInputValue("");
   }
 
   useEffect(() => {
-    const hiddenWord = currentWord[hiddenLanguage]!;
-    setHint(getDefaultHintLines(hiddenWord));
+    const initialHint = correctAnswers.map((answer) =>
+      "_".repeat(answer.length),
+    );
+
+    setHint(initialHint);
     setInputValue("");
+    setGuessed(false);
   }, [currentWord, hiddenLanguage]);
 
   return (
@@ -96,7 +104,9 @@ export function WordGuess({
         onChange={updateInputValue}
       ></InputField>
       <InputButton onClick={() => updateHint()}>Submit</InputButton>
-      <Hint>{hint}</Hint>
+      {hint.map((hintLine, index) => (
+        <Hint key={index}>{hintLine}</Hint>
+      ))}
     </InputContainer>
   );
 }
