@@ -53,7 +53,7 @@ export function WordGuess({ language, hidden, currentWord }: Props) {
     const matched = hint.split("");
 
     for (let i = 0; i < input.length; i++) {
-      if (input[i] === currentWord[language]![i]) {
+      if (input[i] === currentWord[hiddenLanguage]![i]) {
         matched[i] = input[i];
       }
     }
