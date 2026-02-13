@@ -50,6 +50,19 @@ export function WordGuess({
   const correctAnswers = currentWord[hiddenLanguage]!.split("/").map((a) =>
     a.trim(),
   );
+  const processedAnswers = correctAnswers.map((answer) => {
+    if (answer.startsWith("to ")) {
+      return {
+        prefix: "to ",
+        core: answer.slice(3),
+      };
+    }
+
+    return {
+      prefix: "",
+      core: answer,
+    };
+  });
 
   const [inputValue, setInputValue] = useState<string>("");
   const [hint, setHint] = useState<string[]>([]);
@@ -61,12 +74,14 @@ export function WordGuess({
   function updateHint() {
     const trimmedInput = inputValue.trim();
 
-    const newHint = correctAnswers.map((answer, answerIndex) => {
-      const matched = hint[answerIndex].split("");
+    const newHint = processedAnswers.map((answer, answerIndex) => {
+      const currentHint = hint[answerIndex];
+
+      const matched = currentHint.split("");
 
       for (let i = 0; i < trimmedInput.length; i++) {
-        if (trimmedInput[i] === answer[i]) {
-          matched[i] = trimmedInput[i];
+        if (trimmedInput[i] === answer.core[i]) {
+          matched[answer.prefix.length + i] = trimmedInput[i];
         }
       }
 
@@ -75,19 +90,26 @@ export function WordGuess({
 
     setHint(newHint);
 
-    const isCorrect = correctAnswers.some((answer) => answer === trimmedInput);
+    const isCorrect = processedAnswers.some(
+      (answer) => answer.core === trimmedInput,
+    );
 
     if (isCorrect) {
       setGuessed(true);
-      setHint(correctAnswers);
+
+      const revealed = processedAnswers.map(
+        (answer) => answer.prefix + answer.core,
+      );
+
+      setHint(revealed);
     }
 
     setInputValue("");
   }
 
   useEffect(() => {
-    const initialHint = correctAnswers.map((answer) =>
-      "_".repeat(answer.length),
+    const initialHint = processedAnswers.map(
+      (answer) => answer.prefix + "_".repeat(answer.core.length),
     );
 
     setHint(initialHint);
