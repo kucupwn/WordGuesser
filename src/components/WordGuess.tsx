@@ -51,17 +51,22 @@ export function WordGuess({
     a.trim(),
   );
   const processedAnswers = correctAnswers.map((answer) => {
-    if (answer.startsWith("to ")) {
-      return {
-        prefix: "to ",
-        core: answer.slice(3),
-      };
+    let prefix = "";
+    let suffix = "";
+    let core = answer;
+
+    if (core.startsWith("to ")) {
+      prefix = "to ";
+      core = core.slice(3);
     }
 
-    return {
-      prefix: "",
-      core: answer,
-    };
+    const parenthesisMatch = core.match(/\s*\(.*\)$/);
+    if (parenthesisMatch) {
+      suffix = parenthesisMatch[0];
+      core = core.replace(parenthesisMatch[0], "").trim();
+    }
+
+    return { prefix, core, suffix };
   });
 
   const [inputValue, setInputValue] = useState<string>("");
@@ -102,7 +107,7 @@ export function WordGuess({
       setGuessed(true);
 
       const revealed = processedAnswers.map(
-        (answer) => answer.prefix + answer.core,
+        (answer) => answer.prefix + answer.core + answer.suffix,
       );
 
       setHint(revealed);
@@ -118,7 +123,7 @@ export function WordGuess({
         .map((char) => (char === " " ? " " : "_"))
         .join("");
 
-      return answer.prefix + maskedCore;
+      return answer.prefix + maskedCore + answer.suffix;
     });
 
     setHint(initialHint);
