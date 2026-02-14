@@ -8,6 +8,8 @@ interface Props {
 
 const LanguageChooseButtonContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  margin-top: 3rem;
   gap: 1rem;
 `;
 
