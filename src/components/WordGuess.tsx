@@ -30,7 +30,7 @@ const InputField = styled.input`
 const InputButton = styled.button`
   cursor: pointer;
   width: 80px;
-  background-color: var(--action-button-color);
+  background-color: var(--button-color);
   border-radius: 5px;
 `;
 

@@ -60,7 +60,8 @@ const WordBox = styled.div`
   padding: 5px;
   width: 400px;
   height: 100px;
-  background-color: var(--language-button-color);
+  background-color: var(--button-color);
+  border: 2px solid var(--border-color);
   border-radius: 20px;
   font-size: 2rem;
   cursor: pointer;

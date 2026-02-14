@@ -12,7 +12,8 @@ const LanguageChooseButtonContainer = styled.div`
 `;
 
 const LanguageChooseButton = styled.div`
-  background-color: var(--language-button-color);
+  background-color: var(--button-color);
+  border: 2px solid var(--border-color);
   font-size: 32px;
   padding: 0.5rem;
   border-radius: 10px;
