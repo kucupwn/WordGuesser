@@ -1,11 +1,12 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import { russianVocabulary } from "../assets/russianWords";
 import { spanishVocabulary } from "../assets/spanishWords";
 import speaker from "../assets/speaker.png";
 import next from "../assets/arrow-next.png";
 import back from "../assets/arrow-back.png";
 import { WordGuess } from "./WordGuess";
+import type { Languages } from "../App";
 
 export type GameLanguage = "russian" | "spanish";
 
@@ -19,6 +20,7 @@ export type HiddenLanguage = "foreign" | "english" | null;
 
 interface Props {
   language: GameLanguage;
+  setLanguage: Dispatch<SetStateAction<Languages>>;
 }
 
 const vocabularies: Record<GameLanguage, VocabularyItem[]> = {
@@ -42,6 +44,7 @@ const GameContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 2rem;
   gap: 2rem;
 `;
 
@@ -91,7 +94,15 @@ const Back = styled.img`
   height: 42px;
 `;
 
-export function Game({ language }: Props) {
+const LanguagesButton = styled.button`
+  cursor: pointer;
+  width: 80px;
+  background-color: var(--button-color);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+`;
+
+export function Game({ language, setLanguage }: Props) {
   const vocabulary = vocabularies[language];
 
   const [hidden, setHidden] = useState<HiddenLanguage>(null);
@@ -127,40 +138,45 @@ export function Game({ language }: Props) {
   }
 
   return (
-    <GameContainer>
-      <Speaker src={speaker} alt="speaker" onClick={speak}></Speaker>
-      <WordBoxContainer>
-        <WordBox onClick={() => hideWord("foreign")}>
-          {hidden === "foreign" ? (
-            guessed ? (
+    <>
+      <LanguagesButton onClick={() => setLanguage(null)}>
+        Languages
+      </LanguagesButton>
+      <GameContainer>
+        <Speaker src={speaker} alt="speaker" onClick={speak}></Speaker>
+        <WordBoxContainer>
+          <WordBox onClick={() => hideWord("foreign")}>
+            {hidden === "foreign" ? (
+              guessed ? (
+                <p>{history[currentIndex][language]}</p>
+              ) : null
+            ) : (
               <p>{history[currentIndex][language]}</p>
-            ) : null
-          ) : (
-            <p>{history[currentIndex][language]}</p>
-          )}
-        </WordBox>
-        <WordBox onClick={() => hideWord("english")}>
-          {hidden === "english" ? (
-            guessed ? (
+            )}
+          </WordBox>
+          <WordBox onClick={() => hideWord("english")}>
+            {hidden === "english" ? (
+              guessed ? (
+                <p>{history[currentIndex].english}</p>
+              ) : null
+            ) : (
               <p>{history[currentIndex].english}</p>
-            ) : null
-          ) : (
-            <p>{history[currentIndex].english}</p>
-          )}
-        </WordBox>
-      </WordBoxContainer>
-      <StepContainer>
-        <Back src={back} alt="back" onClick={getPreviousWord}></Back>
-        <Next src={next} alt="next" onClick={getRandomWord}></Next>
-      </StepContainer>
-      {hidden && (
-        <WordGuess
-          language={language}
-          hidden={hidden}
-          currentWord={history[currentIndex]}
-          setGuessed={setGuessed}
-        />
-      )}
-    </GameContainer>
+            )}
+          </WordBox>
+        </WordBoxContainer>
+        <StepContainer>
+          <Back src={back} alt="back" onClick={getPreviousWord}></Back>
+          <Next src={next} alt="next" onClick={getRandomWord}></Next>
+        </StepContainer>
+        {hidden && (
+          <WordGuess
+            language={language}
+            hidden={hidden}
+            currentWord={history[currentIndex]}
+            setGuessed={setGuessed}
+          />
+        )}
+      </GameContainer>
+    </>
   );
 }

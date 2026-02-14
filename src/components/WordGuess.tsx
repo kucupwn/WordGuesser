@@ -31,6 +31,7 @@ const InputButton = styled.button`
   cursor: pointer;
   width: 80px;
   background-color: var(--button-color);
+  border: 1px solid var(--border-color);
   border-radius: 5px;
 `;
 
