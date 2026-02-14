@@ -71,6 +71,10 @@ export function WordGuess({
     setInputValue(e.target.value);
   }
 
+  function normalize(str: string) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
   function updateHint() {
     const trimmedInput = inputValue.trim();
 
@@ -80,7 +84,7 @@ export function WordGuess({
       const matched = currentHint.split("");
 
       for (let i = 0; i < trimmedInput.length; i++) {
-        if (trimmedInput[i] === answer.core[i]) {
+        if (normalize(trimmedInput[i]) === normalize(answer.core[i])) {
           matched[answer.prefix.length + i] = trimmedInput[i];
         }
       }
@@ -91,7 +95,7 @@ export function WordGuess({
     setHint(newHint);
 
     const isCorrect = processedAnswers.some(
-      (answer) => answer.core === trimmedInput,
+      (answer) => normalize(answer.core) === normalize(trimmedInput),
     );
 
     if (isCorrect) {
