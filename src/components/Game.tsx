@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import { russianVocabulary } from "../assets/russianWords";
 import { spanishVocabulary } from "../assets/spanishWords";
 import speaker from "../assets/speaker.png";
@@ -136,6 +136,22 @@ export function Game({ language, setLanguage }: Props) {
   function getPreviousWord() {
     setCurrentIndex((prev) => Math.max(0, prev - 1));
   }
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowRight") {
+        getRandomWord();
+      } else if (event.key === "ArrowLeft") {
+        getPreviousWord();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [getRandomWord, getPreviousWord]);
 
   return (
     <>
