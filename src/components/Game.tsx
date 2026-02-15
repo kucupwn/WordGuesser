@@ -143,6 +143,10 @@ export function Game({ language, setLanguage }: Props) {
         getRandomWord();
       } else if (event.key === "ArrowLeft") {
         getPreviousWord();
+      } else if (event.key === "ArrowUp") {
+        hideWord("foreign");
+      } else if (event.key === "ArrowDown") {
+        hideWord("english");
       }
     };
 
@@ -151,7 +155,7 @@ export function Game({ language, setLanguage }: Props) {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [getRandomWord, getPreviousWord]);
+  }, [getRandomWord, getPreviousWord, hideWord]);
 
   return (
     <>
