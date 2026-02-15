@@ -81,7 +81,7 @@ export function WordGuess({
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
-  function updateHint() {
+  function handleGuess() {
     const trimmedInput = inputValue.trim();
 
     const newHint = processedAnswers.map((answer, answerIndex) => {
@@ -132,6 +132,20 @@ export function WordGuess({
     setGuessed(false);
   }, [currentWord, hiddenLanguage]);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        handleGuess();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleGuess]);
+
   return (
     <InputContainer>
       <InputField
@@ -140,7 +154,7 @@ export function WordGuess({
         value={inputValue}
         onChange={updateInputValue}
       ></InputField>
-      <InputButton onClick={() => updateHint()}>Submit</InputButton>
+      <InputButton onClick={() => handleGuess()}>Submit</InputButton>
       {hint.map((hintLine, index) => (
         <Hint key={index}>{hintLine}</Hint>
       ))}
