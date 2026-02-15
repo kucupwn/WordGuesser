@@ -7,6 +7,7 @@ import next from "../assets/arrow-next.png";
 import back from "../assets/arrow-back.png";
 import { WordGuess } from "./WordGuess";
 import type { Languages } from "../App";
+import { WordBox } from "./WordBox";
 
 export type GameLanguage = "russian" | "spanish";
 
@@ -53,21 +54,6 @@ const WordBoxContainer = styled.div`
   justify-content: center;
   flex-direction: column;
   gap: 1rem;
-`;
-
-const WordBox = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 5px;
-  width: 400px;
-  height: 100px;
-  background-color: var(--button-color);
-  border: 2px solid var(--border-color);
-  border-radius: 20px;
-  font-size: 2rem;
-  cursor: pointer;
 `;
 
 const Speaker = styled.img`
@@ -121,11 +107,6 @@ export function Game({ language, setLanguage }: Props) {
     if (hidden) setGuessed(false);
   }
 
-  function hideWord(language: HiddenLanguage) {
-    hidden === language ? setHidden(null) : setHidden(language);
-    setGuessed(false);
-  }
-
   function speak() {
     const word = history[currentIndex][language];
     const wordToSay = new SpeechSynthesisUtterance(word);
@@ -143,10 +124,6 @@ export function Game({ language, setLanguage }: Props) {
         getRandomWord();
       } else if (event.key === "ArrowLeft") {
         getPreviousWord();
-      } else if (event.key === "ArrowUp") {
-        hideWord("foreign");
-      } else if (event.key === "ArrowDown") {
-        hideWord("english");
       }
     };
 
@@ -155,7 +132,7 @@ export function Game({ language, setLanguage }: Props) {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [getRandomWord, getPreviousWord, hideWord]);
+  }, [getRandomWord, getPreviousWord]);
 
   return (
     <>
@@ -165,24 +142,15 @@ export function Game({ language, setLanguage }: Props) {
       <GameContainer>
         <Speaker src={speaker} alt="speaker" onClick={speak}></Speaker>
         <WordBoxContainer>
-          <WordBox onClick={() => hideWord("foreign")}>
-            {hidden === "foreign" ? (
-              guessed ? (
-                <p>{history[currentIndex][language]}</p>
-              ) : null
-            ) : (
-              <p>{history[currentIndex][language]}</p>
-            )}
-          </WordBox>
-          <WordBox onClick={() => hideWord("english")}>
-            {hidden === "english" ? (
-              guessed ? (
-                <p>{history[currentIndex].english}</p>
-              ) : null
-            ) : (
-              <p>{history[currentIndex].english}</p>
-            )}
-          </WordBox>
+          <WordBox
+            language={language}
+            history={history}
+            currentIndex={currentIndex}
+            hidden={hidden}
+            setHidden={setHidden}
+            guessed={guessed}
+            setGuessed={setGuessed}
+          />
         </WordBoxContainer>
         <StepContainer>
           <Back src={back} alt="back" onClick={getPreviousWord}></Back>
