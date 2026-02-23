@@ -31,6 +31,9 @@ export function LanguageSelect({ setLanguage }: Props) {
       <LanguageChooseButton onClick={() => setLanguage("spanish")}>
         Spanish
       </LanguageChooseButton>
+      <LanguageChooseButton onClick={() => setLanguage("dutch")}>
+        Dutch
+      </LanguageChooseButton>
     </LanguageChooseButtonContainer>
   );
 }

@@ -8,13 +8,15 @@ import back from "../assets/arrow-back.png";
 import { WordGuess } from "./WordGuess";
 import type { Languages } from "../App";
 import { WordBox } from "./WordBox";
+import { dutchVocabulary } from "../assets/dutchWords";
 
-export type GameLanguage = "russian" | "spanish";
+export type GameLanguage = "russian" | "spanish" | "dutch";
 
 export type VocabularyItem = {
   english: string;
   russian?: string;
   spanish?: string;
+  dutch?: string;
 };
 
 export type HiddenLanguage = "foreign" | "english" | null;
@@ -27,17 +29,20 @@ interface Props {
 const vocabularies: Record<GameLanguage, VocabularyItem[]> = {
   russian: russianVocabulary,
   spanish: spanishVocabulary,
+  dutch: dutchVocabulary,
 };
 
 const defaultWord: VocabularyItem = {
   english: "English",
   russian: "Russian",
   spanish: "Spanish",
+  dutch: "Dutch",
 };
 
 const speakLanguage = {
   russian: "ru-RU",
   spanish: "es-ES",
+  dutch: "nl-NL",
 };
 
 const GameContainer = styled.div`

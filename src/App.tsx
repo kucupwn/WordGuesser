@@ -2,7 +2,7 @@ import { useState } from "react";
 import { LanguageSelect } from "./components/LanguageSelect";
 import { Game } from "./components/Game";
 
-export type Languages = null | "russian" | "spanish";
+export type Languages = null | "russian" | "spanish" | "dutch";
 
 export function App() {
   const [language, setLanguage] = useState<Languages>(null);
