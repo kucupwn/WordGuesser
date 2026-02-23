@@ -48,9 +48,9 @@ export function WordGuess({
   setGuessed,
 }: Props) {
   const hiddenLanguage = hidden === "foreign" ? language : "english";
-  const correctAnswers = currentWord[hiddenLanguage]!.split(/[\/,]+/).map((a) =>
-    a.trim(),
-  );
+
+  const raw = currentWord[hiddenLanguage]!;
+  const correctAnswers = raw.split(/[,\/](?![^(]*\))/).map((a) => a.trim());
   const processedAnswers = correctAnswers.map((answer) => {
     let prefix = "";
     let suffix = "";
