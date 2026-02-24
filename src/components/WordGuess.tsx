@@ -40,6 +40,7 @@ const Hint = styled.p`
   letter-spacing: 1rem;
   font-size: 20px;
   font-weight: bold;
+  max-width: 300px;
 `;
 
 export function WordGuess({
