@@ -89,7 +89,8 @@ export function WordGuess({
 
       const matched = currentHint.split("");
 
-      for (let i = 0; i < trimmedInput.length; i++) {
+      const maxIteration = Math.min(trimmedInput.length, answer.core.length);
+      for (let i = 0; i < maxIteration; i++) {
         if (normalize(trimmedInput[i]) === normalize(answer.core[i])) {
           matched[answer.prefix.length + i] = trimmedInput[i];
         }
