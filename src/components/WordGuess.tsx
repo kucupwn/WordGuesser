@@ -50,10 +50,15 @@ export function WordGuess({
   const hiddenLanguage = hidden === "foreign" ? language : "english";
 
   const raw = currentWord[hiddenLanguage]!;
-  const correctAnswers = raw.split(/[,\/](?![^(]*\))/).map((a) => a.trim());
+
+  const parenthesisMatch = raw.match(/\(.*\)$/);
+  const parenthesis = parenthesisMatch ? parenthesisMatch[0] : "";
+
+  const cleanRaw = parenthesis ? raw.replace(parenthesis, "").trim() : raw;
+
+  const correctAnswers = cleanRaw.split(/[,\/]/).map((a) => a.trim());
   const processedAnswers = correctAnswers.map((answer) => {
     let prefix = "";
-    let suffix = "";
     let core = answer;
 
     if (core.startsWith("to ")) {
@@ -61,13 +66,7 @@ export function WordGuess({
       core = core.slice(3);
     }
 
-    const parenthesisMatch = core.match(/\s*\(.*\)$/);
-    if (parenthesisMatch) {
-      suffix = parenthesisMatch[0];
-      core = core.replace(parenthesisMatch[0], "").trim();
-    }
-
-    return { prefix, core, suffix };
+    return { prefix, core };
   });
 
   const [inputValue, setInputValue] = useState<string>("");
@@ -108,7 +107,7 @@ export function WordGuess({
       setGuessed(true);
 
       const revealed = processedAnswers.map(
-        (answer) => answer.prefix + answer.core + answer.suffix,
+        (answer) => answer.prefix + answer.core,
       );
 
       setHint(revealed);
@@ -124,7 +123,7 @@ export function WordGuess({
         .map((char) => (char === " " ? " " : "_"))
         .join("");
 
-      return answer.prefix + maskedCore + answer.suffix;
+      return answer.prefix + maskedCore;
     });
 
     setHint(initialHint);
@@ -158,6 +157,7 @@ export function WordGuess({
       {hint.map((hintLine, index) => (
         <Hint key={index}>{hintLine}</Hint>
       ))}
+      {parenthesis && <Hint>{parenthesis}</Hint>}
     </InputContainer>
   );
 }
