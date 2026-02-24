@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import type { GameLanguage, HiddenLanguage, VocabularyItem } from "./Game";
 import {
+  useCallback,
   useEffect,
   useState,
   type ChangeEvent,
@@ -80,7 +81,7 @@ export function WordGuess({
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
-  function handleGuess() {
+  const handleGuess = useCallback(() => {
     const trimmedInput = inputValue.trim();
 
     const newHint = processedAnswers.map((answer, answerIndex) => {
@@ -98,6 +99,7 @@ export function WordGuess({
     });
 
     setHint(newHint);
+    console.log(inputValue);
 
     const isCorrect = processedAnswers.some(
       (answer) => normalize(answer.core) === normalize(trimmedInput),
@@ -114,7 +116,7 @@ export function WordGuess({
     }
 
     setInputValue("");
-  }
+  }, [inputValue, hint, processedAnswers, setGuessed]);
 
   useEffect(() => {
     const initialHint = processedAnswers.map((answer) => {
