@@ -14,6 +14,8 @@ const LanguageChooseButtonContainer = styled.div`
 `;
 
 const LanguageChooseButton = styled.div`
+  display: flex;
+  justify-content: center;
   background-color: var(--button-color);
   border: 2px solid var(--border-color);
   font-size: 32px;
