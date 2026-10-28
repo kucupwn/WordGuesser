@@ -139,6 +139,24 @@ export function Game({ language, setLanguage }: Props) {
     };
   }, [getRandomWord, getPreviousWord]);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowRight") {
+        getRandomWord();
+      } else if (event.key === "ArrowLeft") {
+        getPreviousWord();
+      } else if (event.key === "F2") {
+        speak();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [getRandomWord, getPreviousWord, speak]);
+
   return (
     <>
       <LanguagesButton onClick={() => setLanguage(null)}>
