@@ -3,6 +3,7 @@ import type { GameLanguage, HiddenLanguage, VocabularyItem } from "./Game";
 import {
   useCallback,
   useEffect,
+  useRef,
   useState,
   type ChangeEvent,
   type Dispatch,
@@ -73,6 +74,8 @@ export function WordGuess({
 
   const [inputValue, setInputValue] = useState<string>("");
   const [hint, setHint] = useState<string[]>([]);
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   function updateInputValue(e: ChangeEvent<HTMLInputElement>) {
     setInputValue(e.target.value);
@@ -149,9 +152,14 @@ export function WordGuess({
     };
   }, [handleGuess]);
 
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
   return (
     <InputContainer>
       <InputField
+        ref={inputRef}
         name="guess"
         placeholder={hiddenLanguage}
         value={inputValue}
