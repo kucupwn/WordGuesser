@@ -13,6 +13,7 @@ import type { Languages } from "../App";
 import { WordBox } from "./WordBox";
 import { dutchVocabulary } from "../assets/dutchWords";
 import { ChevronLeftIcon, ChevronRightIcon, SpeakerIcon } from "./Icons";
+import { ThemeToggle } from "./ThemeToggle";
 
 export type GameLanguage = "russian" | "spanish" | "dutch";
 
@@ -103,6 +104,12 @@ const BackLink = styled.button`
       background: var(--accent-soft);
     }
   }
+`;
+
+const TopBarEnd = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
 `;
 
 const LanguageName = styled.p`
@@ -282,7 +289,10 @@ export function Game({ language, setLanguage }: Props) {
           <ChevronLeftIcon />
           Languages
         </BackLink>
-        <LanguageName>{languageLabels[language]}</LanguageName>
+        <TopBarEnd>
+          <LanguageName>{languageLabels[language]}</LanguageName>
+          <ThemeToggle />
+        </TopBarEnd>
       </TopBar>
       <Stage>
         <WordBox

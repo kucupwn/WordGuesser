@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import type { Languages } from "../App";
 import { ArrowRightIcon } from "./Icons";
+import { ThemeToggle } from "./ThemeToggle";
 
 interface Props {
   setLanguage: Dispatch<SetStateAction<Languages>>;
@@ -21,6 +22,13 @@ const Header = styled.header`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+`;
+
+const TitleRow = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
 `;
 
 const Title = styled.h1`
@@ -117,9 +125,12 @@ export function LanguageSelect({ setLanguage }: Props) {
   return (
     <Page>
       <Header>
-        <Title>
-          Word <em>Guesser</em>
-        </Title>
+        <TitleRow>
+          <Title>
+            Word <em>Guesser</em>
+          </Title>
+          <ThemeToggle />
+        </TitleRow>
         <Lede>Choose a language to practice.</Lede>
       </Header>
       <List>
