@@ -1,16 +1,95 @@
 :root {
-  --background-color: rgb(219, 236, 253);
-  --button-color: rgb(255, 203, 152);
-  --border-color: rgb(206, 152, 98);
+  color-scheme: light dark;
+
+  --paper: oklch(96.5% 0.014 85);
+  --card: oklch(99.2% 0.006 85);
+  --ink: oklch(25% 0.02 55);
+  --ink-soft: oklch(45% 0.025 60);
+  --ink-faint: oklch(62% 0.02 65);
+  --rule: oklch(88% 0.02 75);
+  --accent: oklch(56% 0.165 38);
+  --accent-ink: oklch(99% 0.01 85);
+  --accent-soft: oklch(93% 0.04 50);
+  --success: oklch(52% 0.12 150);
+  --shadow: 0 1px 2px oklch(30% 0.03 60 / 0.06), 0 12px 32px -12px oklch(30% 0.05 50 / 0.22);
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-ui: "Schibsted Grotesk", system-ui, sans-serif;
+  --radius: 20px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: oklch(19% 0.012 60);
+    --card: oklch(24% 0.014 60);
+    --ink: oklch(94% 0.012 85);
+    --ink-soft: oklch(76% 0.018 75);
+    --ink-faint: oklch(60% 0.018 70);
+    --rule: oklch(33% 0.015 60);
+    --accent: oklch(70% 0.15 42);
+    --accent-ink: oklch(18% 0.02 50);
+    --accent-soft: oklch(32% 0.05 45);
+    --success: oklch(76% 0.13 150);
+    --shadow: 0 1px 2px oklch(0% 0 0 / 0.3), 0 16px 40px -16px oklch(0% 0 0 / 0.6);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100dvh;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  background-color: var(--background-color);
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+    max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
 }
 
 p {
   margin: 0;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

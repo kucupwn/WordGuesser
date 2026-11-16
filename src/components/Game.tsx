@@ -1,14 +1,18 @@
 import styled from "styled-components";
-import { useEffect, useState, type Dispatch, type SetStateAction } from "react";
+import {
+  useEffect,
+  useState,
+  type Dispatch,
+  type MouseEvent,
+  type SetStateAction,
+} from "react";
 import { russianVocabulary } from "../assets/russianWords";
 import { spanishVocabulary } from "../assets/spanishWords";
-import speaker from "../assets/speaker.png";
-import next from "../assets/arrow-next.png";
-import back from "../assets/arrow-back.png";
 import { WordGuess } from "./WordGuess";
 import type { Languages } from "../App";
 import { WordBox } from "./WordBox";
 import { dutchVocabulary } from "../assets/dutchWords";
+import { ChevronLeftIcon, ChevronRightIcon, SpeakerIcon } from "./Icons";
 
 export type GameLanguage = "russian" | "spanish" | "dutch";
 
@@ -45,52 +49,182 @@ const speakLanguage = {
   dutch: "nl-NL",
 };
 
-const GameContainer = styled.div`
+const languageLabels: Record<GameLanguage, string> = {
+  russian: "Russian",
+  spanish: "Spanish",
+  dutch: "Dutch",
+};
+
+// Keep focus where it is (e.g. the guess input) when tapping controls.
+const keepFocus = (event: MouseEvent) => event.preventDefault();
+
+const Page = styled.main`
+  width: 100%;
+  max-width: 520px;
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 1.25rem;
+`;
+
+const TopBar = styled.header`
+  display: flex;
   align-items: center;
-  margin-top: 2rem;
-  gap: 2rem;
-`;
-
-const WordBoxContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  gap: 1rem;
-`;
-
-const Speaker = styled.img`
-  cursor: pointer;
-  width: 42px;
-  height: 42px;
-`;
-
-const StepContainer = styled.div`
-  display: flex;
   justify-content: space-between;
-  width: 300px;
+  gap: 1rem;
+  min-height: 44px;
 `;
 
-const Next = styled.img`
+const BackLink = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: -0.5rem;
+  padding: 0.5rem 0.875rem 0.5rem 0.375rem;
+  min-height: 44px;
+  background: none;
+  border: none;
+  border-radius: 999px;
+  color: var(--ink-soft);
+  font-weight: 500;
   cursor: pointer;
-  width: 42px;
-  height: 42px;
+  transition:
+    background-color 160ms,
+    color 160ms;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--ink);
+      background: var(--accent-soft);
+    }
+  }
 `;
 
-const Back = styled.img`
-  cursor: pointer;
-  width: 42px;
-  height: 42px;
+const LanguageName = styled.p`
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--accent);
 `;
 
-const LanguagesButton = styled.button`
+const Stage = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.75rem;
+  padding-block: 0.5rem 1rem;
+`;
+
+const Controls = styled.div`
+  position: sticky;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  display: grid;
+  grid-template-columns: 56px 56px 1fr;
+  gap: 0.75rem;
+`;
+
+const IconButton = styled.button`
+  display: grid;
+  place-items: center;
+  height: 56px;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  color: var(--ink);
   cursor: pointer;
-  width: 80px;
-  background-color: var(--button-color);
-  border: 1px solid var(--border-color);
-  border-radius: 5px;
+  transition:
+    transform 120ms,
+    border-color 160ms,
+    color 160ms;
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      border-color: var(--ink-faint);
+    }
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+
+  &:disabled {
+    color: var(--ink-faint);
+    opacity: 0.55;
+    cursor: default;
+  }
+`;
+
+const NextButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  height: 56px;
+  background: var(--accent);
+  border: none;
+  border-radius: 16px;
+  color: var(--accent-ink);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 20px -10px var(--accent);
+  transition:
+    transform 120ms,
+    filter 160ms;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      filter: brightness(1.07);
+    }
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+`;
+
+const Shortcuts = styled.p`
+  display: none;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  color: var(--ink-faint);
+  font-size: 0.8125rem;
+
+  kbd {
+    display: inline-block;
+    min-width: 1.75em;
+    margin-right: 0.25em;
+    padding: 0 0.4em;
+    border: 1px solid var(--rule);
+    border-bottom-width: 2px;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    text-align: center;
+    color: var(--ink-soft);
+  }
+
+  span:has(kbd) {
+    white-space: nowrap;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    display: flex;
+  }
 `;
 
 export function Game({ language, setLanguage }: Props) {
@@ -142,27 +276,25 @@ export function Game({ language, setLanguage }: Props) {
   }, [getRandomWord, getPreviousWord, speak]);
 
   return (
-    <>
-      <LanguagesButton onClick={() => setLanguage(null)}>
-        Languages
-      </LanguagesButton>
-      <GameContainer>
-        <Speaker src={speaker} alt="speaker" onClick={speak}></Speaker>
-        <WordBoxContainer>
-          <WordBox
-            language={language}
-            history={history}
-            currentIndex={currentIndex}
-            hidden={hidden}
-            setHidden={setHidden}
-            guessed={guessed}
-            setGuessed={setGuessed}
-          />
-        </WordBoxContainer>
-        <StepContainer>
-          <Back src={back} alt="back" onClick={getPreviousWord}></Back>
-          <Next src={next} alt="next" onClick={getRandomWord}></Next>
-        </StepContainer>
+    <Page>
+      <TopBar>
+        <BackLink onClick={() => setLanguage(null)}>
+          <ChevronLeftIcon />
+          Languages
+        </BackLink>
+        <LanguageName>{languageLabels[language]}</LanguageName>
+      </TopBar>
+      <Stage>
+        <WordBox
+          language={language}
+          languageLabel={languageLabels[language]}
+          history={history}
+          currentIndex={currentIndex}
+          hidden={hidden}
+          setHidden={setHidden}
+          guessed={guessed}
+          setGuessed={setGuessed}
+        />
         {hidden && (
           <WordGuess
             language={language}
@@ -171,7 +303,44 @@ export function Game({ language, setLanguage }: Props) {
             setGuessed={setGuessed}
           />
         )}
-      </GameContainer>
-    </>
+      </Stage>
+      <Controls>
+        <IconButton
+          aria-label="Previous word"
+          onMouseDown={keepFocus}
+          onClick={getPreviousWord}
+          disabled={currentIndex === 0}
+        >
+          <ChevronLeftIcon />
+        </IconButton>
+        <IconButton
+          aria-label="Pronounce word"
+          onMouseDown={keepFocus}
+          onClick={speak}
+        >
+          <SpeakerIcon />
+        </IconButton>
+        <NextButton onMouseDown={keepFocus} onClick={getRandomWord}>
+          Next word
+          <ChevronRightIcon />
+        </NextButton>
+      </Controls>
+      <Shortcuts>
+        <span>
+          <kbd>←</kbd>
+          <kbd>→</kbd>browse
+        </span>
+        <span>
+          <kbd>↑</kbd>
+          <kbd>↓</kbd>hide a side
+        </span>
+        <span>
+          <kbd>F2</kbd>speak
+        </span>
+        <span>
+          <kbd>Enter</kbd>guess
+        </span>
+      </Shortcuts>
+    </Page>
   );
 }
