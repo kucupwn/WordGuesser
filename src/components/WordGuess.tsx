@@ -82,11 +82,15 @@ export function WordGuess({
   }
 
   function normalize(str: string) {
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return str
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
   }
 
   const handleGuess = useCallback(() => {
-    const trimmedInput = inputValue.trim();
+    // The "to " prefix is shown in the hint, so accept guesses with or without it.
+    const trimmedInput = inputValue.trim().replace(/^to\s+/i, "");
 
     const newHint = processedAnswers.map((answer, answerIndex) => {
       const currentHint = hint[answerIndex];
@@ -96,7 +100,7 @@ export function WordGuess({
       const maxIteration = Math.min(trimmedInput.length, answer.core.length);
       for (let i = 0; i < maxIteration; i++) {
         if (normalize(trimmedInput[i]) === normalize(answer.core[i])) {
-          matched[answer.prefix.length + i] = trimmedInput[i];
+          matched[answer.prefix.length + i] = answer.core[i];
         }
       }
 
@@ -104,7 +108,6 @@ export function WordGuess({
     });
 
     setHint(newHint);
-    console.log(inputValue);
 
     const isCorrect = processedAnswers.some(
       (answer) => normalize(answer.core) === normalize(trimmedInput),

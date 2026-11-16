@@ -129,22 +129,6 @@ export function Game({ language, setLanguage }: Props) {
         getRandomWord();
       } else if (event.key === "ArrowLeft") {
         getPreviousWord();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [getRandomWord, getPreviousWord]);
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "ArrowRight") {
-        getRandomWord();
-      } else if (event.key === "ArrowLeft") {
-        getPreviousWord();
       } else if (event.key === "F2") {
         speak();
       }
